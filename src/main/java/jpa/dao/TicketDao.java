@@ -12,7 +12,6 @@ public class TicketDao extends AbstractJpaDao <Long, Ticket> {
         super(Ticket.class);
     }
 
-
     public Ticket assignTag(Ticket ticket, Tag tag){
         ticket.addTag(tag);
         this.update(ticket);
@@ -48,6 +47,5 @@ public class TicketDao extends AbstractJpaDao <Long, Ticket> {
         this.update(ticket);
         return ticket;
     }
-
 
 }

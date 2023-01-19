@@ -4,9 +4,7 @@ import jpa.dao.AbstractJpaDao;
 import jpa.dao.DiscussionDao;
 import jpa.dao.TagDao;
 import jpa.dao.TicketDao;
-import jpa.domain.Discussion;
-import jpa.domain.Tag;
-import jpa.domain.Ticket;
+import jpa.domain.*;
 
 public class JpaTest {
 
@@ -47,7 +45,9 @@ public class JpaTest {
 			AbstractJpaDao TicketDao = new TicketDao();
 			Ticket ticket1 = new Ticket();
 			Ticket ticket2 = new Ticket();
-			Ticket ticket3 = new Ticket();
+			Ticket ticket3 = new TicketBug();
+			TicketBug ticketBug1 = new TicketBug();
+			TicketRequest ticketRequest1 = new TicketRequest();
 			ticket1.setContent("Informatique");
 			ticket2.setContent("Informatique");
 			ticket3.setContent("Informatique");
