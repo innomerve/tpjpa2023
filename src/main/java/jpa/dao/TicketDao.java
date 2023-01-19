@@ -11,4 +11,5 @@ public class TicketDao extends AbstractJpaDao <Long, Ticket> {
     {
         super(Ticket.class);
     }
+
 }
