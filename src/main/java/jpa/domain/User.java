@@ -5,13 +5,15 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Entity
 public class User implements Serializable {
     private long id;
     private String name;
-    private List<Ticket> tickets=new ArrayList<>();
+    private List<Ticket> createdTickets=new ArrayList<>();
     private List<Discussion> discussions = new ArrayList<>();
+    private List<Ticket> affectedTickets = new ArrayList<>();
 
     @Id
     @GeneratedValue
@@ -32,12 +34,12 @@ public class User implements Serializable {
     }
 
     @OneToMany (mappedBy = "author", cascade = CascadeType.PERSIST)
-    public List<Ticket> getTickets() {
-        return tickets;
+    public List<Ticket> getCreatedTickets() {
+        return createdTickets;
     }
 
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
+    public void setCreatedTickets(List<Ticket> tickets) {
+        this.createdTickets = tickets;
     }
     @OneToMany (mappedBy = "author", cascade = CascadeType.PERSIST)
     public List<Discussion> getDiscussions() {
@@ -46,5 +48,42 @@ public class User implements Serializable {
 
     public void setDiscussions(List<Discussion> discussions) {
         this.discussions = discussions;
+    }
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    public List<Ticket> getAffectedTickets() {
+        return affectedTickets;
+    }
+
+    public void setAffectedTickets(List<Ticket> affectedTickets) {
+        this.affectedTickets = affectedTickets;
+    }
+
+
+    public void addCreatedTicket(Ticket ticket){
+        if(createdTickets.contains(ticket)) throw new NoSuchElementException("Ticket déja créé");
+        createdTickets.add(ticket);
+    }
+    public void removeCreatedTicket(Ticket ticket){
+        if(!createdTickets.contains(ticket)) throw new NoSuchElementException("Ticket inexistant");
+        createdTickets.remove(ticket);
+    }
+
+    public void addAffectedTicket(Ticket ticket){
+        if(affectedTickets.contains(ticket)) throw new NoSuchElementException("Ticket déja assigné à cet utilisateur");
+        affectedTickets.add(ticket);
+    }
+    public void removeAffectedTicket(Ticket ticket){
+        if(!affectedTickets.contains(affectedTickets)) throw new NoSuchElementException("Ticket  inexistant");
+        affectedTickets.remove(ticket);
+    }
+
+    public void addDiscussion(Discussion discussion){
+        if(discussions.contains(discussion)) throw new NoSuchElementException("Discussion déja assigné à cet utilisateur");
+        discussions.add(discussion);
+    }
+    public void removeDiscussion(Discussion discussion){
+        if(!discussions.contains(discussion)) throw new NoSuchElementException("Discussion inexistante");
+        discussions.remove(discussion);
     }
 }

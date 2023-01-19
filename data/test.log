@@ -1,64 +1,31 @@
-/*C1*/SET SCHEMA SYSTEM_LOBS
-INSERT INTO BLOCKS VALUES(0,2147483647,0)
-COMMIT
-/*C3*/SET SCHEMA PUBLIC
+/*C8*/SET SCHEMA PUBLIC
 DISCONNECT
-/*C4*/SET SCHEMA PUBLIC
+/*C9*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C10*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C11*/SET SCHEMA PUBLIC
 drop table if exists Discussion CASCADE 
 drop table if exists Tag CASCADE 
 drop table if exists Tag_Ticket CASCADE 
 drop table if exists Ticket CASCADE 
 drop table if exists User CASCADE 
+drop table if exists User_Ticket CASCADE 
 drop sequence hibernate_sequence if exists
 create sequence hibernate_sequence start with 1 increment by 1
 create table Discussion (id bigint not null, contenu varchar(255), author_id bigint, ticket_id bigint, primary key (id))
 create table Tag (id bigint not null, label varchar(255), primary key (id))
 create table Tag_Ticket (tags_id bigint not null, tickets_id bigint not null)
-create table Ticket (id bigint not null, closeAt timestamp, content varchar(255), createdAt timestamp, title varchar(255), author_id bigint, primary key (id))
+create table Ticket (id bigint not null, closedAt timestamp, content varchar(255), createdAt timestamp, title varchar(255), author_id bigint, primary key (id))
 create table User (id bigint not null, name varchar(255), primary key (id))
+create table User_Ticket (resolvers_id bigint not null, affectedTickets_id bigint not null)
 alter table Discussion add constraint FKnlhgmbi4c0d2wh8ct7rqnrtig foreign key (author_id) references User
 alter table Discussion add constraint FKfqtupq1id3j5xyhiovk0lamwt foreign key (ticket_id) references Ticket
 alter table Tag_Ticket add constraint FKngiik6u2gyi8oekx6qhby7u7e foreign key (tickets_id) references Ticket
 alter table Tag_Ticket add constraint FKdgcd1cknkv09yy5kvgyxwq9yp foreign key (tags_id) references Tag
 alter table Ticket add constraint FK9elxf4d28my4akdcnb1099hgi foreign key (author_id) references User
-DISCONNECT
-/*C5*/SET SCHEMA PUBLIC
-drop table if exists Discussion CASCADE 
-drop table if exists Tag CASCADE 
-drop table if exists Tag_Ticket CASCADE 
-drop table if exists Ticket CASCADE 
-drop table if exists User CASCADE 
-drop sequence hibernate_sequence if exists
-create sequence hibernate_sequence start with 1 increment by 1
-create table Discussion (id bigint not null, contenu varchar(255), author_id bigint, ticket_id bigint, primary key (id))
-create table Tag (id bigint not null, label varchar(255), primary key (id))
-create table Tag_Ticket (tags_id bigint not null, tickets_id bigint not null)
-create table Ticket (id bigint not null, closeAt timestamp, content varchar(255), createdAt timestamp, title varchar(255), author_id bigint, primary key (id))
-create table User (id bigint not null, name varchar(255), primary key (id))
-alter table Discussion add constraint FKnlhgmbi4c0d2wh8ct7rqnrtig foreign key (author_id) references User
-alter table Discussion add constraint FKfqtupq1id3j5xyhiovk0lamwt foreign key (ticket_id) references Ticket
-alter table Tag_Ticket add constraint FKngiik6u2gyi8oekx6qhby7u7e foreign key (tickets_id) references Ticket
-alter table Tag_Ticket add constraint FKdgcd1cknkv09yy5kvgyxwq9yp foreign key (tags_id) references Tag
-alter table Ticket add constraint FK9elxf4d28my4akdcnb1099hgi foreign key (author_id) references User
-DISCONNECT
-/*C6*/SET SCHEMA PUBLIC
-drop table if exists Discussion CASCADE 
-drop table if exists Tag CASCADE 
-drop table if exists Tag_Ticket CASCADE 
-drop table if exists Ticket CASCADE 
-drop table if exists User CASCADE 
-drop sequence hibernate_sequence if exists
-create sequence hibernate_sequence start with 1 increment by 1
-create table Discussion (id bigint not null, contenu varchar(255), author_id bigint, ticket_id bigint, primary key (id))
-create table Tag (id bigint not null, label varchar(255), primary key (id))
-create table Tag_Ticket (tags_id bigint not null, tickets_id bigint not null)
-create table Ticket (id bigint not null, closeAt timestamp, content varchar(255), createdAt timestamp, title varchar(255), author_id bigint, primary key (id))
-create table User (id bigint not null, name varchar(255), primary key (id))
-alter table Discussion add constraint FKnlhgmbi4c0d2wh8ct7rqnrtig foreign key (author_id) references User
-alter table Discussion add constraint FKfqtupq1id3j5xyhiovk0lamwt foreign key (ticket_id) references Ticket
-alter table Tag_Ticket add constraint FKngiik6u2gyi8oekx6qhby7u7e foreign key (tickets_id) references Ticket
-alter table Tag_Ticket add constraint FKdgcd1cknkv09yy5kvgyxwq9yp foreign key (tags_id) references Tag
-alter table Ticket add constraint FK9elxf4d28my4akdcnb1099hgi foreign key (author_id) references User
+alter table User_Ticket add constraint FK854sku7fgut5vs0yn2k9abk0p foreign key (affectedTickets_id) references Ticket
+alter table User_Ticket add constraint FKcjbh089ccl2jxej53j0tb1c2w foreign key (resolvers_id) references User
 INSERT INTO TAG VALUES(1,'Informatique')
 ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 2
 COMMIT
@@ -67,5 +34,79 @@ ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 3
 COMMIT
 INSERT INTO TAG VALUES(3,'Developpement')
 ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 4
+COMMIT
+INSERT INTO DISCUSSION VALUES(4,'Bonjour j''ai consult\u00e9 votre page; personnellement je ne vois rien \u00e0 contester',NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 5
+COMMIT
+INSERT INTO DISCUSSION VALUES(5,'Rebonjour, bah en effet je vois des bugs sur la page1 et page4',NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 6
+COMMIT
+INSERT INTO DISCUSSION VALUES(6,'Bug resolu',NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 7
+COMMIT
+INSERT INTO DISCUSSION VALUES(7,'Hello! Quelqu''un a t-il vu mon ticket?',NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 8
+COMMIT
+INSERT INTO TICKET VALUES(8,NULL,'Informatique',NULL,NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 9
+COMMIT
+INSERT INTO TICKET VALUES(9,NULL,'Informatique',NULL,NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 10
+COMMIT
+INSERT INTO TICKET VALUES(10,NULL,'Informatique',NULL,NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 11
+COMMIT
+DISCONNECT
+/*C12*/SET SCHEMA PUBLIC
+drop table if exists Discussion CASCADE 
+drop table if exists Tag CASCADE 
+drop table if exists Tag_Ticket CASCADE 
+drop table if exists Ticket CASCADE 
+drop table if exists User CASCADE 
+drop table if exists User_Ticket CASCADE 
+drop sequence hibernate_sequence if exists
+create sequence hibernate_sequence start with 1 increment by 1
+create table Discussion (id bigint not null, contenu varchar(255), author_id bigint, ticket_id bigint, primary key (id))
+create table Tag (id bigint not null, label varchar(255), primary key (id))
+create table Tag_Ticket (tags_id bigint not null, tickets_id bigint not null)
+create table Ticket (id bigint not null, closedAt timestamp, content varchar(255), createdAt timestamp, title varchar(255), author_id bigint, primary key (id))
+create table User (id bigint not null, name varchar(255), primary key (id))
+create table User_Ticket (resolvers_id bigint not null, affectedTickets_id bigint not null)
+alter table Discussion add constraint FKnlhgmbi4c0d2wh8ct7rqnrtig foreign key (author_id) references User
+alter table Discussion add constraint FKfqtupq1id3j5xyhiovk0lamwt foreign key (ticket_id) references Ticket
+alter table Tag_Ticket add constraint FKngiik6u2gyi8oekx6qhby7u7e foreign key (tickets_id) references Ticket
+alter table Tag_Ticket add constraint FKdgcd1cknkv09yy5kvgyxwq9yp foreign key (tags_id) references Tag
+alter table Ticket add constraint FK9elxf4d28my4akdcnb1099hgi foreign key (author_id) references User
+alter table User_Ticket add constraint FK854sku7fgut5vs0yn2k9abk0p foreign key (affectedTickets_id) references Ticket
+alter table User_Ticket add constraint FKcjbh089ccl2jxej53j0tb1c2w foreign key (resolvers_id) references User
+INSERT INTO TAG VALUES(1,'Informatique')
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 2
+COMMIT
+INSERT INTO TAG VALUES(2,'Mecanique')
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 3
+COMMIT
+INSERT INTO TAG VALUES(3,'Developpement')
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 4
+COMMIT
+INSERT INTO DISCUSSION VALUES(4,'Bonjour j''ai consult\u00e9 votre page; personnellement je ne vois rien \u00e0 contester',NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 5
+COMMIT
+INSERT INTO DISCUSSION VALUES(5,'Rebonjour, bah en effet je vois des bugs sur la page1 et page4',NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 6
+COMMIT
+INSERT INTO DISCUSSION VALUES(6,'Bug resolu',NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 7
+COMMIT
+INSERT INTO DISCUSSION VALUES(7,'Hello! Quelqu''un a t-il vu mon ticket?',NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 8
+COMMIT
+INSERT INTO TICKET VALUES(8,NULL,'Informatique',NULL,NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 9
+COMMIT
+INSERT INTO TICKET VALUES(9,NULL,'Informatique',NULL,NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 10
+COMMIT
+INSERT INTO TICKET VALUES(10,NULL,'Informatique',NULL,NULL,NULL)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 11
 COMMIT
 DISCONNECT

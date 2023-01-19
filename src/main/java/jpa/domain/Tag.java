@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Entity
 public class Tag implements Serializable {
@@ -38,5 +39,14 @@ public class Tag implements Serializable {
 
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
+    }
+
+    public void addTicket(Ticket ticket){
+        if(tickets.contains(ticket)) throw new NoSuchElementException("Ticket déja assigné à ce tag");
+        tickets.add(ticket);
+    }
+    public void removeTicket(Ticket ticket){
+        if(!tickets.contains(ticket)) throw new NoSuchElementException("Ticket  inexistant");
+        tickets.remove(ticket);
     }
 }

@@ -8,10 +8,6 @@ import jpa.domain.Discussion;
 import jpa.domain.Tag;
 import jpa.domain.Ticket;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
-
 public class JpaTest {
 
 	/**

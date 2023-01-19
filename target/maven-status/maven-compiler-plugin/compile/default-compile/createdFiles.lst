@@ -1,6 +1,0 @@
-jpa\JpaTest.class
-jpa\domain\Discussion.class
-jpa\EntityManagerHelper.class
-jpa\domain\Ticket.class
-jpa\domain\Tag.class
-jpa\domain\User.class
