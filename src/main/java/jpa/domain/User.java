@@ -74,7 +74,7 @@ public class User implements Serializable {
         affectedTickets.add(ticket);
     }
     public void removeAffectedTicket(Ticket ticket){
-        if(!affectedTickets.contains(affectedTickets)) throw new NoSuchElementException("Ticket  inexistant");
+        if(!affectedTickets.contains(ticket)) throw new NoSuchElementException("Ticket  inexistant");
         affectedTickets.remove(ticket);
     }
 
