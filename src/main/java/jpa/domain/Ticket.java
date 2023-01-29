@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="TYPE",discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorColumn(name="DTYPE",discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("General")
 public class Ticket implements Serializable {
     private long id;
@@ -50,7 +50,7 @@ public class Ticket implements Serializable {
         this.content = content;
     }
     @NotNull
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
