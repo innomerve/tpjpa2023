@@ -1,7 +1,7 @@
 package jpa.dto;
 
 
-public class ListUserDto {
+public class UserDto {
 
 
 	// {"id":1, "name": "Baké"}

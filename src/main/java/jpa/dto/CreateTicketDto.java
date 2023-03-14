@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import java.util.List;
 
-public class NewTicketDto {
+public class CreateTicketDto {
 
 	// { "title": "pb de charge", "content": "mon pc a un problème de charge", "author_id": 8,
 	// "tag_ids": [1,2,3,4]}
@@ -16,9 +16,9 @@ public class NewTicketDto {
 	String content;
 
 	@NotNull(message = "Author may not be null")
-	Long author_id;
+	Long authorId;
 
-	List<Long> tag_ids;
+	List<Long> tagIds;
 
 	public String getTitle() {
 		return title;
@@ -37,18 +37,18 @@ public class NewTicketDto {
 	}
 
 	public long getAuthorId() {
-		return author_id;
+		return authorId;
 	}
 
-	public void setAuthorId(long author_id) {
-		this.author_id = author_id;
+	public void setAuthorId(long authorId) {
+		this.authorId = authorId;
 	}
 
 	public List<Long>  getTagIds() {
-		return tag_ids;
+		return tagIds;
 	}
 
-	public void setTagIds(List<Long>  tag_ids) {
-		this.tag_ids = tag_ids;
+	public void setTagIds(List<Long>  tagIds) {
+		this.tagIds = tagIds;
 	}
 }

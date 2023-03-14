@@ -32,10 +32,10 @@ public class JpaTest {
 			Discussion discussion2 = new Discussion();
 			Discussion discussion3 = new Discussion();
 			Discussion discussion4 = new Discussion();
-			discussion1.setContenu("Bonjour j'ai consulté votre page; personnellement je ne vois rien à contester");
-			discussion2.setContenu("Rebonjour, bah en effet je vois des bugs sur la page1 et page4");
-			discussion3.setContenu("Bug resolu");
-			discussion4.setContenu("Hello! Quelqu'un a t-il vu mon ticket?");
+			discussion1.setContent("Bonjour j'ai consulté votre page; personnellement je ne vois rien à contester");
+			discussion2.setContent("Rebonjour, bah en effet je vois des bugs sur la page1 et page4");
+			discussion3.setContent("Bug resolu");
+			discussion4.setContent("Hello! Quelqu'un a t-il vu mon ticket?");
 			DiscussionDao.save(discussion1);
 			DiscussionDao.save(discussion2);
 			DiscussionDao.save(discussion3);

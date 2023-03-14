@@ -13,7 +13,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
+import jpa.responses.AppResponse;
 
 import jpa.dao.TagDao;
 import jpa.dao.TicketDao;
@@ -22,26 +24,21 @@ import jpa.dao.UserDao;
 import jpa.domain.User;
 
 import jpa.dto.CreateOrUpdateUserDto;
-import jpa.dto.ListUserDto;
+import jpa.dto.UserDto;
 
 @Path("api/users")
 @Produces(MediaType.APPLICATION_JSON)
 
 public class UsersService  {
-
-
-	TicketDao ticketDao = new TicketDao();
 	UserDao userDao = new UserDao();
-	TagDao tagDao = new TagDao();
-
 	
 	@GET
-	public List<ListUserDto> getAll() {		
+	public List<UserDto> getAll() {		
 		List<User> users = userDao.findAll();
 
-		List<ListUserDto> toReturn = new ArrayList<>();
+		List<UserDto> toReturn = new ArrayList<>();
 		for (User user : users) {
-			ListUserDto dto = new ListUserDto();
+			UserDto dto = new UserDto();
 			dto.setId(user.getId());
 			dto.setName(user.getName());
 			toReturn.add(dto);
@@ -51,10 +48,13 @@ public class UsersService  {
 
 	@GET
 	@Path("/{id}")
-	public User getById(@PathParam("id") long id) {	
+	public Response getById(@PathParam("id") long id) {
 		User user = userDao.findOne(id);
-		if (user == null) throw new WebApplicationException("Utilisateur ayant pour " + id + " inexistant.", 404);
-		return user;
+		if(user == null) return AppResponse.error("Utilisateur ayant pour " + id + " inexistant.",Response.Status.NOT_FOUND);
+		UserDto dto = new UserDto();
+		dto.setId(user.getId());
+		dto.setName(user.getName());
+		return AppResponse.success(dto);
 	}
 
 
@@ -71,29 +71,23 @@ public class UsersService  {
 	@PUT
 	@Path("/{id}")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public User update(@PathParam("id") long id, @Valid CreateOrUpdateUserDto toUpdate) {	
+	public Response update(@PathParam("id") long id, @Valid CreateOrUpdateUserDto toUpdate) {
 		
 		User user = userDao.findOne(id);
 
-		if(user == null) throw new WebApplicationException("Utilisateur ayant pour " + id + " inexistant.", 404);
-		
+		if(user == null) return AppResponse.error("Utilisateur ayant pour " + id + " inexistant.",Response.Status.NOT_FOUND);
+
 		user.setName(toUpdate.getName());	
 		
-		return userDao.update(user);
+		return AppResponse.success(userDao.update(user));
 	}
 
 	@DELETE
 	@Path("/{id}")
-	public User delete(@PathParam("id") long id) {	
-		
+	public Response delete(@PathParam("id") long id) {
 		User user = userDao.findOne(id);
-
-		if(user == null) throw new WebApplicationException("Utilisateur ayant pour " + id + " inexistant.", 404);
-		
+		if(user == null) return AppResponse.error("Utilisateur ayant pour " + id + " inexistant.",Response.Status.NOT_FOUND);	
 		userDao.deleteById(id);
-
-		return null;
+		return AppResponse.success(null);
 	}
-
-
 }

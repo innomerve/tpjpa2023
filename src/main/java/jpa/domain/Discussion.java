@@ -1,19 +1,19 @@
 package jpa.domain;
 import com.sun.istack.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 public class Discussion implements Serializable {
 
     private long id;
-    private String contenu;
+    private String content;
     private User author;
     private Ticket ticket;
+    private LocalDateTime createdAt;
+
 
     @Id
     @GeneratedValue
@@ -26,12 +26,12 @@ public class Discussion implements Serializable {
     }
 
     @NotNull
-    public String getContenu() {
-        return contenu;
+    public String getContent() {
+        return content;
     }
 
-    public void setContenu(String contenu) {
-        this.contenu = contenu;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @NotNull
@@ -51,5 +51,16 @@ public class Discussion implements Serializable {
 
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
+    }
+
+    @NotNull
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public LocalDateTime getCreatedAt() {
+
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
