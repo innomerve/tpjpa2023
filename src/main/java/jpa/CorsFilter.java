@@ -12,8 +12,15 @@ public class CorsFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext,
                        ContainerResponseContext responseContext) throws IOException {
-        responseContext.getHeaders().add(
-                "Access-Control-Allow-Origin", "*");
+
+        String origin = requestContext.getHeaderString("origin");
+        if ((origin != null) && (!origin.isEmpty())) {
+            responseContext.getHeaders().add("Access-Control-Allow-Origin", origin);
+        } else {
+            // *(allow from all servers) OR https://crunchify.com/
+            responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
+        }
+
         responseContext.getHeaders().add(
                 "Access-Control-Allow-Credentials", "true");
         responseContext.getHeaders().add(

@@ -33,12 +33,11 @@ public class TestApplication extends Application {
     public Set<Class<?>> getClasses() {
 
         final Set<Class<?>> clazzes = new HashSet<Class<?>>();
- 
+        clazzes.add(CorsFilter.class);
         clazzes.add(TicketsService.class);
         clazzes.add(UsersService.class);
         clazzes.add(DiscussionsService.class);
         clazzes.add(TagsService.class);
-        clazzes.add(CorsFilter.class);
 
         return clazzes;
     }
