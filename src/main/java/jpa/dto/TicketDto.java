@@ -1,15 +1,10 @@
 package jpa.dto;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.validation.constraints.NotNull;
 
 public class TicketDto {
 
@@ -91,7 +86,7 @@ public class TicketDto {
         this.tags.add(tag);
     }
 
-    public List<Map<String, Object>> getDiscussion() {
+    public List<Map<String, Object>> getDiscussions() {
         return discussions;
     }
 

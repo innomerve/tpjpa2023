@@ -73,8 +73,8 @@ public class TicketsService  {
 	@Path("/{id}")
 	public Response getById(@PathParam("id") long id) {
 		Ticket ticket = ticketDao.findOne(id);
-		if(ticket == null) return AppResponse.error("Ticket ayant pour " + id + " inexistant.",Response.Status.NOT_FOUND);
-
+		if(ticket == null) return AppResponse.error("Ticket ayant pour id " + id + " inexistant.",Response.Status.NOT_FOUND);
+	
 		TicketDto dto = new TicketDto();
 		dto.setId(ticket.getId());
 		dto.setTitle(ticket.getTitle());
