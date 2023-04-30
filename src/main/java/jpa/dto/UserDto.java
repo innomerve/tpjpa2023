@@ -9,6 +9,11 @@ public class UserDto {
 	Long id;
 	String name;
 
+	public UserDto(){};
+	public UserDto(Long id, String name){
+		this.id = id;
+		this.name = name;
+	};
 
 	public String getName() {
 		return name;

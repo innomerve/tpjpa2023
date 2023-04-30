@@ -9,16 +9,4 @@ public class TagDao extends AbstractJpaDao <Long, Tag> {
     {
         super(Tag.class);
     }
-
-    public Tag assignTicket(Tag tag, Ticket ticket){
-        tag.addTicket(ticket);
-        this.update(tag);
-        return tag;
-    }
-
-    public Tag removeTicket(Tag tag, Ticket ticket){
-        tag.removeTicket(ticket);
-        this.update(tag);
-        return tag;
-    }
 }

@@ -9,6 +9,7 @@ import jpa.domain.User;
 import jpa.dto.CreateOrUpdateTagDto;
 import jpa.dto.TagDto;
 import jpa.dto.TicketDto;
+import jpa.dto.UserDto;
 import jpa.responses.AppResponse;
 
 import javax.validation.Valid;
@@ -94,6 +95,21 @@ public class TagsService {
 		return AppResponse.success(null);
 	}
 
+
+	/*************************************** tags/{id}/tickets *************************************************************/
+	@GET
+	@Path("/{id}/tickets")
+	@Consumes({MediaType.APPLICATION_JSON})
+	public Response getAllTicketsByTagId(@PathParam("id") Long id) {
+
+		Tag tag = tagDao.findOne(id);
+		if(tag == null) return AppResponse.error("Tag ayant pour id" + id + " inexistant.",Response.Status.NOT_FOUND);
+
+		return AppResponse.success(this.getTicketsByTags(tag));
+	}
+
+
+
 	private List<TicketDto> getTicketsByTags(Tag tag){
 		List <TicketDto> toReturn = new ArrayList<>();
 		for(Ticket ticket: tag.getTickets()){
@@ -120,4 +136,6 @@ public class TagsService {
 		}
 		return toReturn;
 	}
+
+
 }

@@ -3,16 +3,14 @@ import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
+import java.util.HashSet;
+import java.util.Set;
 @Entity
 public class Tag implements Serializable {
 
     private Long id;
     private String label="";
-    private List<Ticket> tickets = new ArrayList<>();
+    private Set<Ticket> tickets = new HashSet<>();
 
     @Id
     @GeneratedValue
@@ -32,21 +30,12 @@ public class Tag implements Serializable {
     public void setLabel(String label) {
         this.label = label;
     }
-    @ManyToMany
-    public List<Ticket> getTickets() {
+    @ManyToMany (mappedBy = "tags", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    public Set<Ticket> getTickets() {
         return tickets;
     }
 
-    public void setTickets(List<Ticket> tickets) {
+    public void setTickets(Set<Ticket> tickets) {
         this.tickets = tickets;
-    }
-
-    public void addTicket(Ticket ticket){
-        if(tickets.contains(ticket)) throw new NoSuchElementException("Ticket déja assigné à ce tag");
-        tickets.add(ticket);
-    }
-    public void removeTicket(Ticket ticket){
-        if(!tickets.contains(ticket)) throw new NoSuchElementException("Ticket  inexistant");
-        tickets.remove(ticket);
     }
 }

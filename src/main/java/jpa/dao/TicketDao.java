@@ -12,7 +12,7 @@ public class TicketDao extends AbstractJpaDao <Long, Ticket> {
         super(Ticket.class);
     }
 
-    public Ticket assignTag(Ticket ticket, Tag tag){
+    public Ticket addTag(Ticket ticket, Tag tag){
         ticket.addTag(tag);
         this.update(ticket);
         return ticket;
@@ -24,7 +24,7 @@ public class TicketDao extends AbstractJpaDao <Long, Ticket> {
         return ticket;
     }
 
-    public Ticket assignResolver(Ticket ticket, User user){
+    public Ticket addResolver(Ticket ticket, User user){
         ticket.addResolver(user);
         this.update(ticket);
         return ticket;
@@ -32,18 +32,6 @@ public class TicketDao extends AbstractJpaDao <Long, Ticket> {
 
     public Ticket removeResolver(Ticket ticket, User resolverToRemove){
         ticket.removeResolver(resolverToRemove);
-        this.update(ticket);
-        return ticket;
-    }
-
-    public Ticket addDiscussion(Ticket ticket, Discussion discussion){
-        ticket.addDiscussion(discussion);
-        this.update(ticket);
-        return ticket;
-    }
-
-    public Ticket removeDiscussion(Ticket ticket, Discussion discussion){
-        ticket.removeDiscussion(discussion);
         this.update(ticket);
         return ticket;
     }

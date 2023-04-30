@@ -58,4 +58,8 @@ public abstract class AbstractJpaDao<K, T extends Serializable> implements IGene
         T entity = findOne(entityId);
         delete(entity);
     }
+
+    public boolean exists(T entity){
+        return entityManager.contains(entity);
+    }
 }

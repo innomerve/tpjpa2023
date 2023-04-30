@@ -4,8 +4,8 @@ import com.sun.istack.NotNull;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.NoSuchElementException;
 
 @Entity
@@ -20,9 +20,9 @@ public class Ticket implements Serializable {
     private LocalDateTime closedAt;
     private User author;
 
-    private List<User> resolvers =new ArrayList<>();
-    private List<Discussion> discussions = new ArrayList<>();
-    private List<Tag> tags = new ArrayList<>();
+    private Set<User> resolvers =new HashSet<>();
+    private Set<Discussion> discussions = new HashSet<>();
+    private Set<Tag> tags = new HashSet<>();
 
     @Id
     @GeneratedValue
@@ -74,58 +74,64 @@ public class Ticket implements Serializable {
     public void setAuthor(User author) {
         this.author = author;
     }
-    @OneToMany (mappedBy = "ticket", cascade = CascadeType.PERSIST)
-    public List<Discussion> getDiscussions() {
+    @OneToMany (mappedBy = "ticket", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    public Set<Discussion> getDiscussions() {
         return discussions;
     }
 
-    public void setDiscussions(List<Discussion> discussionList) {
-        this.discussions = discussionList;
+    public void setDiscussions(Set<Discussion> discussions) {
+        this.discussions = discussions;
     }
 
-    @ManyToMany (mappedBy = "tickets", cascade = CascadeType.PERSIST)
-    public List<Tag> getTags() {
+    @ManyToMany (fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    public Set<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
 
-    @ManyToMany(mappedBy = "affectedTickets", cascade = CascadeType.PERSIST)
-    public List<User> getResolvers() {
+    @ManyToMany (fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    public Set<User> getResolvers() {
         return resolvers;
     }
 
-    public void setResolvers(List<User> resolvers) {
+    public void setResolvers(Set<User> resolvers) {
         this.resolvers = resolvers;
     }
 
     public void addTag(Tag tag){
         if(tags.contains(tag)) throw new NoSuchElementException("Tag déja assigné à ce ticket");
-        tags.add(tag);
+        this.tags.add(tag);
+        tag.getTickets().add(this);
     }
     public void removeTag(Tag tag){
-        if(!tags.contains(tag)) throw new NoSuchElementException("Tag inexistant");
-        tags.remove(tag);
+        if(!tags.contains(tag)) throw new NoSuchElementException("Tag  inexistant");
+        this.tags.remove(tag);
+        tag.getTickets().remove(this);
     }
 
     public void addResolver(User user){
         if(resolvers.contains(user)) throw new NoSuchElementException("Utilisateur déja assigné à ce ticket");
-        resolvers.add(user);
+        this.resolvers.add(user);
+        user.getAffectedTickets().add(this);
     }
     public void removeResolver(User user){
         if(!resolvers.contains(user)) throw new NoSuchElementException("Resolver  inexistant");
-        resolvers.remove(user);
+        this.resolvers.remove(user);
+        user.getAffectedTickets().remove(this);
     }
 
+    /*
     public void addDiscussion(Discussion discussion){
-        if(discussions.contains(discussion)) throw new NoSuchElementException("Discussion déja assigné à ce ticket");
+        //if(discussions.contains(discussion)) throw new NoSuchElementException("Discussion déja assigné à ce ticket");
         discussions.add(discussion);
     }
     public void removeDiscussion(Discussion discussion){
         if(!discussions.contains(discussion)) throw new NoSuchElementException("Discussion inexistante");
         discussions.remove(discussion);
     }
+    */
 
 }

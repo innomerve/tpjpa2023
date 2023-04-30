@@ -43,6 +43,7 @@ public class Discussion implements Serializable {
     public void setAuthor(User author) {
         this.author = author;
     }
+    
     @NotNull
     @ManyToOne
     public Ticket getTicket() {

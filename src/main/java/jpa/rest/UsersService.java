@@ -1,7 +1,6 @@
 package jpa.rest;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -15,6 +14,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import jpa.domain.Discussion;
+import jpa.domain.Tag;
+import jpa.domain.Ticket;
+import jpa.dto.DiscussionDto;
+import jpa.dto.TicketDto;
 import jpa.responses.AppResponse;
 
 import jpa.dao.TagDao;
@@ -31,9 +35,9 @@ import jpa.dto.UserDto;
 
 public class UsersService  {
 	UserDao userDao = new UserDao();
-	
+
 	@GET
-	public List<UserDto> getAll() {		
+	public List<UserDto> getAll() {
 		List<User> users = userDao.findAll();
 
 		List<UserDto> toReturn = new ArrayList<>();
@@ -60,11 +64,11 @@ public class UsersService  {
 
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public User create(@Valid CreateOrUpdateUserDto toSave) {	
-		
+	public User create(@Valid CreateOrUpdateUserDto toSave) {
+
 		User user = new User();
-		user.setName(toSave.getName());	
-		userDao.save(user)	;
+		user.setName(toSave.getName());
+		userDao.save(user);
 		return null;
 	}
 
@@ -72,13 +76,13 @@ public class UsersService  {
 	@Path("/{id}")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Response update(@PathParam("id") long id, @Valid CreateOrUpdateUserDto toUpdate) {
-		
+
 		User user = userDao.findOne(id);
 
-		if(user == null) return AppResponse.error("Utilisateur ayant pour " + id + " inexistant.",Response.Status.NOT_FOUND);
+		if(user == null) return AppResponse.error("Utilisateur ayant pour id " + id + " inexistant.",Response.Status.NOT_FOUND);
 
-		user.setName(toUpdate.getName());	
-		
+		user.setName(toUpdate.getName());
+
 		return AppResponse.success(userDao.update(user));
 	}
 
@@ -86,8 +90,83 @@ public class UsersService  {
 	@Path("/{id}")
 	public Response delete(@PathParam("id") long id) {
 		User user = userDao.findOne(id);
-		if(user == null) return AppResponse.error("Utilisateur ayant pour " + id + " inexistant.",Response.Status.NOT_FOUND);	
+		if(user == null) return AppResponse.error("Utilisateur ayant pour " + id + " inexistant.",Response.Status.NOT_FOUND);
 		userDao.deleteById(id);
 		return AppResponse.success(null);
 	}
+
+
+	/*************************************** users/{id}/tickets/affected *************************************************************/
+	@GET
+	@Path("/{id}/tickets/affected")
+	@Consumes({MediaType.APPLICATION_JSON})
+	public Response getAllAffectedTicketsByUserId(@PathParam("id") Long id) {
+		User user = userDao.findOne(id);
+		if(user == null) return AppResponse.error("Utilisateur ayant pour id" + id + " inexistant.",Response.Status.NOT_FOUND);
+		return AppResponse.success(this.getTicketsByUsers(user,false));
+	}
+
+
+	/*************************************** users/{id}/tickets/created *************************************************************/
+	@GET
+	@Path("/{id}/tickets/created")
+	@Consumes({MediaType.APPLICATION_JSON})
+	public Response getAllCreatedTicketsByUserId(@PathParam("id") Long id) {
+		User user = userDao.findOne(id);
+		if(user == null) return AppResponse.error("Utilisateur ayant pour id" + id + " inexistant.",Response.Status.NOT_FOUND);
+		return AppResponse.success(this.getTicketsByUsers(user,true));
+	}
+
+
+	/*************************************** users/{id}/discussions *************************************************************/
+	@GET
+	@Path("/{id}/discussions")
+	@Consumes({MediaType.APPLICATION_JSON})
+	public Response getAllDiscussionsByUserId(@PathParam("id") Long id) {
+		User user = userDao.findOne(id);
+		if(user == null) return AppResponse.error("Utilisateur ayant pour id" + id + " inexistant.",Response.Status.NOT_FOUND);
+
+		List <DiscussionDto> toReturn = new ArrayList<>();
+		for(Discussion discussion: user.getDiscussions()){
+			DiscussionDto dto = new DiscussionDto();
+			dto.setId(discussion.getId());
+			dto.setContent(discussion.getContent());
+			dto.setAuthor(discussion.getAuthor().getId(), discussion.getAuthor().getName());
+			dto.setTicket(discussion.getTicket().getId(), discussion.getTicket().getTitle(), discussion.getTicket().getContent(), discussion.getTicket().getAuthor().getId());
+			dto.setCreatedAt(discussion.getCreatedAt());
+			toReturn.add(dto);
+		}
+		return AppResponse.success(toReturn);
+	}
+
+
+	private List<TicketDto> getTicketsByUsers(User user, Boolean created){
+		List <TicketDto> toReturn = new ArrayList<>();
+		Set<Ticket> tickets = new HashSet<>();
+		if (created) tickets = user.getCreatedTickets(); else tickets = user.getCreatedTickets();
+		for(Ticket ticket: tickets){
+			TicketDto dto = new TicketDto();
+			dto.setId(ticket.getId());
+			dto.setTitle(ticket.getTitle());
+			dto.setContent(ticket.getContent());
+			dto.setAuthor(ticket.getAuthor().getId(), ticket.getAuthor().getName());
+			if (ticket.getCreatedAt() != null) dto.setCreatedAt(ticket.getCreatedAt());
+			if (ticket.getClosedAt() != null) dto.setClosedAt(ticket.getClosedAt());
+			for(User u:ticket.getResolvers()){
+				Map<String, Object> resolver = new HashMap<>();
+				resolver.put("id", u.getId());
+				resolver.put("name", u.getName());
+				dto.addResolver(resolver);
+			}
+			for(Tag t:ticket.getTags()){
+				Map<String, Object> toAddTag = new HashMap<>();
+				toAddTag.put("id", t.getId());
+				toAddTag.put("label", t.getLabel());
+				dto.addTag(toAddTag);
+			}
+			toReturn.add(dto);
+		}
+		return toReturn;
+	}
+
 }

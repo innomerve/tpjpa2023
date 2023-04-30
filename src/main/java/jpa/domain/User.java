@@ -3,17 +3,17 @@ import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.NoSuchElementException;
 
 @Entity
 public class User implements Serializable {
     private long id;
     private String name;
-    private List<Ticket> createdTickets=new ArrayList<>();
-    private List<Discussion> discussions = new ArrayList<>();
-    private List<Ticket> affectedTickets = new ArrayList<>();
+    private Set<Ticket> createdTickets=new HashSet<>();
+    private Set<Discussion> discussions = new HashSet<>();
+    private Set<Ticket> affectedTickets = new HashSet<>();
 
     @Id
     @GeneratedValue
@@ -34,32 +34,31 @@ public class User implements Serializable {
     }
 
     @OneToMany (mappedBy = "author", cascade = CascadeType.PERSIST)
-    public List<Ticket> getCreatedTickets() {
+    public Set<Ticket> getCreatedTickets() {
         return createdTickets;
     }
 
-    public void setCreatedTickets(List<Ticket> tickets) {
+    public void setCreatedTickets(Set<Ticket> tickets) {
         this.createdTickets = tickets;
     }
     @OneToMany (mappedBy = "author", cascade = CascadeType.PERSIST)
-    public List<Discussion> getDiscussions() {
+    public Set<Discussion> getDiscussions() {
         return discussions;
     }
 
-    public void setDiscussions(List<Discussion> discussions) {
+    public void setDiscussions(Set<Discussion> discussions) {
         this.discussions = discussions;
     }
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    public List<Ticket> getAffectedTickets() {
+    @ManyToMany(mappedBy = "resolvers", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    public Set<Ticket> getAffectedTickets() {
         return affectedTickets;
     }
 
-    public void setAffectedTickets(List<Ticket> affectedTickets) {
+    public void setAffectedTickets(Set<Ticket> affectedTickets) {
         this.affectedTickets = affectedTickets;
     }
-
-
+    
     public void addCreatedTicket(Ticket ticket){
         if(createdTickets.contains(ticket)) throw new NoSuchElementException("Ticket déja créé");
         createdTickets.add(ticket);
@@ -67,15 +66,6 @@ public class User implements Serializable {
     public void removeCreatedTicket(Ticket ticket){
         if(!createdTickets.contains(ticket)) throw new NoSuchElementException("Ticket inexistant");
         createdTickets.remove(ticket);
-    }
-
-    public void addAffectedTicket(Ticket ticket){
-        if(affectedTickets.contains(ticket)) throw new NoSuchElementException("Ticket déja assigné à cet utilisateur");
-        affectedTickets.add(ticket);
-    }
-    public void removeAffectedTicket(Ticket ticket){
-        if(!affectedTickets.contains(ticket)) throw new NoSuchElementException("Ticket  inexistant");
-        affectedTickets.remove(ticket);
     }
 
     public void addDiscussion(Discussion discussion){

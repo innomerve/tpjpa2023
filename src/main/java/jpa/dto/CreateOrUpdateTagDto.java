@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 public class CreateOrUpdateTagDto {
 
-	// { "name": "Baké"}
+	// { "label": "Baké"}
 	@NotNull(message = "Label may not be null")
 	String label;
 
