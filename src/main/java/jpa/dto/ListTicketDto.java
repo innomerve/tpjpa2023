@@ -11,7 +11,7 @@ import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
-public class TicketDto {
+public class ListTicketDto {
 
 
     long id;
@@ -19,10 +19,10 @@ public class TicketDto {
     String content;
     String createdAt;
     String closedAt;
+    int nbDiscussion;
     Map<String, Object> author = new HashMap<>();
     List<Map<String, Object>> resolvers = new ArrayList<>();
     List<Map<String, Object>> tags = new ArrayList<>();
-    List<Map<String, Object>> discussions = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -66,6 +66,14 @@ public class TicketDto {
         this.closedAt = formatter.format(closedAt);
     }
 
+    public int getNbDiscussion() {
+        return nbDiscussion;
+    }
+
+    public void setNbDiscussion(int nbDiscussion) {
+        this.nbDiscussion = nbDiscussion;
+    }
+
     public Map<String, Object> getAuthor() {
         return author;
     }
@@ -89,13 +97,5 @@ public class TicketDto {
 
     public void addTag(Map<String, Object> tag) {
         this.tags.add(tag);
-    }
-
-    public List<Map<String, Object>> getDiscussion() {
-        return discussions;
-    }
-
-    public void addDiscussion(Map<String, Object> discussion) {
-        this.discussions.add(discussion);
     }
 }

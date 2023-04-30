@@ -8,6 +8,9 @@ public class UserDto {
 
 	Long id;
 	String name;
+	int nbDiscussion;
+	int nbAffectedTicket;
+	int nbCreatedTicket;
 
 	public UserDto(){};
 	public UserDto(Long id, String name){
@@ -29,6 +32,32 @@ public class UserDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+	public int getNbDiscussion() {
+        return nbDiscussion;
+    }
+
+    public void setNbDiscussion(int nbDiscussion) {
+        this.nbDiscussion = nbDiscussion;
+    }
+
+
+	public int getNbAffectedTicket() {
+        return nbAffectedTicket;
+    }
+
+    public void setNbAffectedTicket(int nbAffectedTicket) {
+        this.nbAffectedTicket = nbAffectedTicket;
+    }
+
+
+	public int getNbCreatedTicket() {
+        return nbCreatedTicket;
+    }
+
+    public void setNbCreatedTicket(int nbCreatedTicket) {
+        this.nbCreatedTicket = nbCreatedTicket;
     }
 
 }

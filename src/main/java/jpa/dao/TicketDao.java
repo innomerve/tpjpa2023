@@ -1,6 +1,5 @@
 package jpa.dao;
 
-import jpa.domain.Discussion;
 import jpa.domain.Tag;
 import jpa.domain.Ticket;
 import jpa.domain.User;

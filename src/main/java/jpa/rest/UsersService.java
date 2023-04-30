@@ -45,6 +45,10 @@ public class UsersService  {
 			UserDto dto = new UserDto();
 			dto.setId(user.getId());
 			dto.setName(user.getName());
+			dto.setNbDiscussion(user.getDiscussions().size());
+			dto.setNbCreatedTicket(user.getCreatedTickets().size());
+			dto.setNbAffectedTicket(user.getAffectedTickets().size());
+
 			toReturn.add(dto);
 		}
 		return toReturn;
@@ -58,6 +62,9 @@ public class UsersService  {
 		UserDto dto = new UserDto();
 		dto.setId(user.getId());
 		dto.setName(user.getName());
+		dto.setNbDiscussion(user.getDiscussions().size());
+		dto.setNbCreatedTicket(user.getCreatedTickets().size());
+		dto.setNbAffectedTicket(user.getAffectedTickets().size());
 		return AppResponse.success(dto);
 	}
 

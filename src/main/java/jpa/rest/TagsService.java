@@ -7,6 +7,7 @@ import jpa.domain.Tag;
 import jpa.domain.Ticket;
 import jpa.domain.User;
 import jpa.dto.CreateOrUpdateTagDto;
+import jpa.dto.ListTagDto;
 import jpa.dto.TagDto;
 import jpa.dto.TicketDto;
 import jpa.dto.UserDto;
@@ -33,15 +34,15 @@ public class TagsService {
 
 	
 	@GET
-	public List<TagDto> getAll() {
+	public List<ListTagDto> getAll() {
 		List<Tag> tags = tagDao.findAll();
 
-		List<TagDto> toReturn = new ArrayList<>();
+		List<ListTagDto> toReturn = new ArrayList<>();
 		for (Tag tag : tags) {
-			TagDto dto = new TagDto();
+			ListTagDto dto = new ListTagDto();
 			dto.setId(tag.getId());
 			dto.setLabel(tag.getLabel());
-			dto.setTickets(getTicketsByTags(tag));
+			dto.setNbTicket(tag.getTickets().size());
 			toReturn.add(dto);
 		}
 		return toReturn;

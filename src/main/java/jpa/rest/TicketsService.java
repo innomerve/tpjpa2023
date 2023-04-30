@@ -39,16 +39,17 @@ public class TicketsService  {
 
 
 	@GET
-	public List<TicketDto> getAll() {
+	public List<ListTicketDto> getAll() {
 
 		List <Ticket> tickets = ticketDao.findAll();
-		List <TicketDto> toReturn = new ArrayList<>();
+		List <ListTicketDto> toReturn = new ArrayList<>();
 		for(Ticket ticket: tickets){
-			TicketDto dto = new TicketDto();
+			ListTicketDto dto = new ListTicketDto();
 			dto.setId(ticket.getId());
 			dto.setTitle(ticket.getTitle());
 			dto.setContent(ticket.getContent());
 			dto.setAuthor(ticket.getAuthor().getId(), ticket.getAuthor().getName());
+			dto.setNbDiscussion(ticket.getDiscussions().size());
 			if (ticket.getCreatedAt() != null) dto.setCreatedAt(ticket.getCreatedAt());
 			if (ticket.getClosedAt() != null) dto.setClosedAt(ticket.getClosedAt());
 			for(User user:ticket.getResolvers()){
@@ -92,6 +93,21 @@ public class TicketsService  {
 			toAddTag.put("id", tag.getId());
 			toAddTag.put("label", tag.getLabel());
 			dto.addTag(toAddTag);
+		}
+
+		for(Discussion discussion:ticket.getDiscussions()){
+			Map<String, Object> toAdd = new HashMap<>();
+
+			Map<String, Object> author = new HashMap<>();
+			author.put("id", discussion.getAuthor().getId());
+			author.put("name", discussion.getAuthor().getName());
+
+			toAdd.put("id", discussion.getId());
+			toAdd.put("content", discussion.getContent());
+			toAdd.put("createdAt", discussion.getCreatedAt());
+			toAdd.put("author", author);
+
+			dto.addDiscussion(toAdd);
 		}
 		return AppResponse.success(dto);
 	}

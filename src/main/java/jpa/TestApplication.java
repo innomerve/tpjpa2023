@@ -38,6 +38,7 @@ public class TestApplication extends Application {
         clazzes.add(UsersService.class);
         clazzes.add(DiscussionsService.class);
         clazzes.add(TagsService.class);
+        clazzes.add(CorsFilter.class);
 
         return clazzes;
     }
