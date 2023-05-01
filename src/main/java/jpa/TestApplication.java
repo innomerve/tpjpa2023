@@ -21,10 +21,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import jpa.rest.DiscussionsService;
-import jpa.rest.TagsService;
-import jpa.rest.TicketsService;
-import jpa.rest.UsersService;
+import jpa.rest.*;
 
 public class TestApplication extends Application {
 
@@ -38,6 +35,7 @@ public class TestApplication extends Application {
         clazzes.add(UsersService.class);
         clazzes.add(DiscussionsService.class);
         clazzes.add(TagsService.class);
+        clazzes.add(FillDatabaseService.class);
 
         return clazzes;
     }

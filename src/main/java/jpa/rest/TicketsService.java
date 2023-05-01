@@ -1,6 +1,7 @@
 package jpa.rest;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -102,9 +103,11 @@ public class TicketsService  {
 			author.put("id", discussion.getAuthor().getId());
 			author.put("name", discussion.getAuthor().getName());
 
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy 'à' hh:mm a");
+
 			toAdd.put("id", discussion.getId());
 			toAdd.put("content", discussion.getContent());
-			toAdd.put("createdAt", discussion.getCreatedAt());
+			toAdd.put("createdAt", formatter.format(discussion.getCreatedAt()));
 			toAdd.put("author", author);
 
 			dto.addDiscussion(toAdd);

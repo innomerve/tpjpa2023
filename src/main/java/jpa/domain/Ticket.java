@@ -42,6 +42,7 @@ public class Ticket implements Serializable {
         this.title = title;
     }
     @NotNull
+    @Lob
     public String getContent() {
         return content;
     }

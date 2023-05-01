@@ -26,6 +26,7 @@ public class Discussion implements Serializable {
     }
 
     @NotNull
+    @Lob
     public String getContent() {
         return content;
     }
@@ -57,6 +58,7 @@ public class Discussion implements Serializable {
     @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     public LocalDateTime getCreatedAt() {
+
 
         return createdAt;
     }
