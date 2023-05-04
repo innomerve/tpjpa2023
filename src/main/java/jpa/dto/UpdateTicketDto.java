@@ -14,7 +14,7 @@ public class UpdateTicketDto {
 	@NotNull(message = "Content may not be null")
 	String content;
 
-	LocalDateTime closedAt;
+	Boolean closedAt =false;
 
 	public String getTitle() {
 		return title;
@@ -32,11 +32,11 @@ public class UpdateTicketDto {
 		this.content = content;
 	}
 
-	public LocalDateTime getClosedAt() {
+	public Boolean getClosedAt() {
 		return closedAt;
 	}
 
-	public void setClosedAt(LocalDateTime closedAt) {
+	public void setClosedAt(Boolean closedAt) {
 		this.closedAt = closedAt;
 	}
 

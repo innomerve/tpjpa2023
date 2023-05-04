@@ -124,15 +124,5 @@ public class Ticket implements Serializable {
         user.getAffectedTickets().remove(this);
     }
 
-    /*
-    public void addDiscussion(Discussion discussion){
-        //if(discussions.contains(discussion)) throw new NoSuchElementException("Discussion déja assigné à ce ticket");
-        discussions.add(discussion);
-    }
-    public void removeDiscussion(Discussion discussion){
-        if(!discussions.contains(discussion)) throw new NoSuchElementException("Discussion inexistante");
-        discussions.remove(discussion);
-    }
-    */
 
 }

@@ -83,8 +83,15 @@ public class TagsService {
 		if(tag == null) return AppResponse.error("Tag ayant pour " + id + " inexistant.",Response.Status.NOT_FOUND);
 
 		tag.setLabel(toUpdate.getLabel());
-		
-		return AppResponse.success(tagDao.update(tag));
+
+		tag = tagDao.update(tag);
+
+		TagDto dto = new TagDto();
+		dto.setId(tag.getId());
+		dto.setLabel(tag.getLabel());
+		dto.setTickets(getTicketsByTags(tag));
+
+		return AppResponse.success(dto);
 	}
 
 	@DELETE

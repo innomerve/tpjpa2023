@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import jpa.dao.DiscussionDao;
 import jpa.domain.Discussion;
 import jpa.domain.Tag;
 import jpa.domain.Ticket;
@@ -35,6 +36,8 @@ import jpa.dto.UserDto;
 
 public class UsersService  {
 	UserDao userDao = new UserDao();
+	TicketDao ticketDao = new TicketDao();
+	DiscussionDao discussionDao = new DiscussionDao();
 
 	@GET
 	public List<UserDto> getAll() {
@@ -89,15 +92,30 @@ public class UsersService  {
 		if(user == null) return AppResponse.error("Utilisateur ayant pour id " + id + " inexistant.",Response.Status.NOT_FOUND);
 
 		user.setName(toUpdate.getName());
+		user = userDao.update(user);
+		UserDto dto = new UserDto();
+		dto.setId(user.getId());
+		dto.setName(user.getName());
+		dto.setNbDiscussion(user.getDiscussions().size());
+		dto.setNbCreatedTicket(user.getCreatedTickets().size());
+		dto.setNbAffectedTicket(user.getAffectedTickets().size());
 
-		return AppResponse.success(userDao.update(user));
+		return AppResponse.success(dto);
 	}
 
 	@DELETE
 	@Path("/{id}")
 	public Response delete(@PathParam("id") long id) {
 		User user = userDao.findOne(id);
+
+		for (Discussion d : new HashSet<Discussion>(user.getDiscussions())) {
+			discussionDao.deleteById(d.getId());
+		}
+
 		if(user == null) return AppResponse.error("Utilisateur ayant pour " + id + " inexistant.",Response.Status.NOT_FOUND);
+		for (Ticket ticket : new HashSet<Ticket>(user.getCreatedTickets())) {
+			ticketDao.deleteById(ticket.getId());
+		}
 		userDao.deleteById(id);
 		return AppResponse.success(null);
 	}

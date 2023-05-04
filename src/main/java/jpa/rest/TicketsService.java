@@ -2,12 +2,7 @@ package jpa.rest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -155,9 +150,46 @@ public class TicketsService  {
 
 		ticket.setTitle(toUpdate.getTitle());
 		ticket.setContent(toUpdate.getContent());
-		ticket.setClosedAt(toUpdate.getClosedAt());
+		if(toUpdate.getClosedAt()) ticket.setClosedAt(LocalDateTime.now());
+		else ticket.setClosedAt(null);
+		ticket =ticketDao.update(ticket);
+		TicketDto dto = new TicketDto();
+		dto.setId(ticket.getId());
+		dto.setTitle(ticket.getTitle());
+		dto.setContent(ticket.getContent());
+		dto.setAuthor(ticket.getAuthor().getId(), ticket.getAuthor().getName());
+		if (ticket.getCreatedAt() != null) dto.setCreatedAt(ticket.getCreatedAt());
+		if (ticket.getClosedAt() != null) dto.setClosedAt(ticket.getClosedAt());
+		for(User user:ticket.getResolvers()){
+			Map<String, Object> resolver = new HashMap<>();
+			resolver.put("id", user.getId());
+			resolver.put("name", user.getName());
+			dto.addResolver(resolver);
+		}
+		for(Tag tag:ticket.getTags()){
+			Map<String, Object> toAddTag = new HashMap<>();
+			toAddTag.put("id", tag.getId());
+			toAddTag.put("label", tag.getLabel());
+			dto.addTag(toAddTag);
+		}
 
-		return AppResponse.success(ticketDao.update(ticket));
+		for(Discussion discussion:ticket.getDiscussions()){
+			Map<String, Object> toAdd = new HashMap<>();
+
+			Map<String, Object> author = new HashMap<>();
+			author.put("id", discussion.getAuthor().getId());
+			author.put("name", discussion.getAuthor().getName());
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy 'à' hh:mm a");
+
+			toAdd.put("id", discussion.getId());
+			toAdd.put("content", discussion.getContent());
+			toAdd.put("createdAt", formatter.format(discussion.getCreatedAt()));
+			toAdd.put("author", author);
+
+			dto.addDiscussion(toAdd);
+		}
+		return AppResponse.success(dto);
 	}
 
 	@DELETE
@@ -190,14 +222,19 @@ public class TicketsService  {
 	@POST
 	@Path("/{id}/tags")
 	@Consumes({MediaType.APPLICATION_JSON})
-	public Response addTagToTicket(@PathParam("id") long id, @Valid AddMultipleIdsDto toSave) {
+	public Response addTagToTicket(@PathParam("id") Long id, @Valid AddMultipleIdsDto toSave) {
 
 		Ticket ticket = ticketDao.findOne(id);
 		if(ticket == null) return AppResponse.error("Ticket ayant pour id" + id + " inexistant.",Response.Status.NOT_FOUND);
 
 		for (Long tagId:toSave.getIds()) {
 			Tag tag = tagDao.findOne(tagId);
-			if (tag != null) ticketDao.addTag(ticket, tag);
+			if (tag != null) {
+				try {
+					ticketDao.addTag(ticket, tag);
+				}
+				catch (NoSuchElementException e){}
+			}
 		}
 		return AppResponse.success(null);
 	}
@@ -218,7 +255,7 @@ public class TicketsService  {
 
 	/*************************************** tickets/{id}/resolvers *************************************************************/
 	@GET
-	@Path("/tickets/{id}/resolvers")
+	@Path("/{id}/resolvers")
 	@Consumes({MediaType.APPLICATION_JSON})
 	public Response getAllResolversByTicketId(@PathParam("id") Long id) {
 
