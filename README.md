@@ -19,7 +19,7 @@
 
   - [Principes de fonctionnement](#principes-de-fonctionnement)
   
-- [Documentation de l'API](./APIDOC.md)
+- [Documentation de l'API](https://documenter.getpostman.com/view/25189655/2s93eVYEd5)
 
 - [Auteurs](#auteurs)
 
