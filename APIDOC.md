@@ -1,5 +1,18 @@
 # Project: Ticket gestionnaire
-Buy or rent spacecrafts
+
+# Table des matières
+
+- [Discussions](#-collection-discussions)
+
+- [Tags](#-collection-tags)
+
+- [Tickets](#-collection-tickets)
+
+- [Utilisateurs](#-collection-users)
+
+- [Remplissage préalable des données](#end-point-fill-database-with-data)
+
+
 # 📁 Collection: discussions 
 
 
@@ -2195,7 +2208,7 @@ null
 ## End-point: fill database with data
 ### Method: GET
 >```
->undefined
+>{{baseUrl}}/fill/database
 >```
 ### Response: 200
 ```json
