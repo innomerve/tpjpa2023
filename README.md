@@ -18,7 +18,7 @@
   - [Démarrage](#démarrage)
 
   - [Principes de fonctionnement](#principes-de-fonctionnement)
-  -   
+  
 - [Documentation de l'API](./APIDOC.md)
 
 - [Auteurs](#auteurs)
